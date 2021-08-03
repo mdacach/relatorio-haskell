@@ -53,7 +53,7 @@ imprimirTracos n = "-" ++ imprimirTracos (n-1)
 
 rodape :: String
 rodape =  imprimirTracos tamanho ++ "\n" ++
-          "Soma Total:" ++ show (somavendas 12) ++ "\n" ++
+          "Soma Total:" ++ show (somaVendas 12) ++ "\n" ++
           "Maior Venda: " ++ show (maiorVenda 12) ++ "\n" ++
           "Venda Zerada? " ++ show (vendaZerada 12) ++ "\n" ++
           "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada 12) ++ "\n" ++
@@ -75,9 +75,9 @@ vendas 11 = 22
 vendas 12 = 18
 vendas _  = 0
 
-somavendas :: Int -> Int
-somavendas 1 = vendas 1
-somavendas n = vendas n + somavendas (n-1)
+somaVendas :: Int -> Int
+somaVendas 1 = vendas 1
+somaVendas n = vendas n + somaVendas (n-1)
 
 --------------------------------------------------------
 -- Implementar as funções abaixo utilizando recursão
