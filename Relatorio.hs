@@ -57,7 +57,8 @@ rodape =  imprimirTracos tamanho ++ "\n" ++
           "Maior Venda: " ++ show (maiorVenda 12) ++ "\n" ++
           "Venda Zerada? " ++ show (vendaZerada 12) ++ "\n" ++
           "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada 12) ++ "\n" ++
-          "Media de Vendas: " ++ show (mediaVendas 12) ++ "\n"
+          "Media de Vendas: " ++ show (mediaVendas 12) ++ "\n" ++
+          "Desvio Padrao: " ++ show (desvioPadraoVendas 12) ++ "\n"
 
 vendas :: Int -> Int
 vendas 1 = 10
@@ -99,12 +100,23 @@ quantidadeVendaZerada 1 = fromEnum (vendas 1 == 0)
 quantidadeVendaZerada n = fromEnum (vendas n == 0) + quantidadeVendaZerada (n-1) 
 
 -- Calcular a média de vendas no entre o mês 1 e n, inclusive.
-mediaVendas :: Int -> Float
+mediaVendas :: Int -> Double
 mediaVendas n = mediaVendasAux n n
 
-mediaVendasAux :: Int -> Int -> Float
+mediaVendasAux :: Int -> Int -> Double
 mediaVendasAux 0 n = 0
 mediaVendasAux i n = (fromIntegral (vendas i)) / (fromIntegral n) + mediaVendasAux (i-1) n
+
+-- Calcular desvio padrao de vendas no entre o mês 1 e n, inclusive.
+desvioPadraoVendas :: Int -> Double
+desvioPadraoVendas n = sqrt (desvioPadraoVendasAux n n)
+
+desvioPadraoVendasAux :: Int -> Int -> Double
+desvioPadraoVendasAux 0 n = 0.0
+desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromIntegral (vendas i) - mediaVendas n) / fromIntegral n + desvioPadraoVendasAux (i-1) n
+
+
+
 
 ------------------------------------------------
 -- TO DO:
