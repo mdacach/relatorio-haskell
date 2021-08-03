@@ -19,14 +19,10 @@ cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++
             "Empresa XPTO" ++ "\n" ++
             (imprimirSimbolo tamanho '-') ++ "\n"
 
-corpo = undefined
-rodape = undefined
-
 imprimirSimbolo :: Int -> Char -> String
 imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 
-{-
 corpo :: String
 corpo = imprimeMeses 12
 
@@ -51,9 +47,17 @@ mes 10 = "Outubro"
 mes 11 = "Novembro"
 mes 12 = "Dezembro"
 
+imprimirTracos :: Int -> String
+imprimirTracos 0 = ""
+imprimirTracos n = "-" ++ imprimirTracos (n-1)
+
 rodape :: String
 rodape =  imprimirTracos tamanho ++ "\n" ++
-          "Soma Total:" ++ show (somavendas 12) ++ "\n"
+          "Soma Total:" ++ show (somavendas 12) ++ "\n" ++
+          "Maior Venda: " ++ show (maiorVenda 12) ++ "\n" ++
+          "Venda Zerada? " ++ show (vendaZerada 12) ++ "\n" ++
+          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada 12) ++ "\n" ++
+          "Media de Vendas: " ++ show (mediaVendas 12) ++ "\n"
 
 vendas :: Int -> Int
 vendas 1 = 10
@@ -80,20 +84,27 @@ somavendas n = vendas n + somavendas (n-1)
 --------------------------------------------------------
 
 -- Calcular a maior venda entre o mês 1 e n, inclusive
-maiorvenda :: Int -> Int
-maiorvenda n = undefined
+maiorVenda :: Int -> Int
+maiorVenda 1 = vendas 1
+maiorVenda n = max (vendas n) (maiorVenda (n-1)) 
 
 -- Verificar se há venda zerada entre o mês 1 e n, inclusive.
 vendaZerada :: Int -> Bool
-vendaZerada n = undefined
+vendaZerada 1 = (vendas 1 == 0)
+vendaZerada n = (vendas n == 0) || vendaZerada (n-1)
 
 -- Retorna a quantidade de vendas zeradas entre o mês 1 e n, inclusive
 quantidadeVendaZerada :: Int -> Int
-quantidadeVendaZerada n = undefined
+quantidadeVendaZerada 1 = fromEnum (vendas 1 == 0)
+quantidadeVendaZerada n = fromEnum (vendas n == 0) + quantidadeVendaZerada (n-1) 
 
 -- Calcular a média de vendas no entre o mês 1 e n, inclusive.
 mediaVendas :: Int -> Float
-mediaVendas n = undefined
+mediaVendas n = mediaVendasAux n n
+
+mediaVendasAux :: Int -> Int -> Float
+mediaVendasAux 0 n = 0
+mediaVendasAux i n = (fromIntegral (vendas i)) / (fromIntegral n) + mediaVendasAux (i-1) n
 
 ------------------------------------------------
 -- TO DO:
@@ -109,6 +120,4 @@ mediaVendas n = undefined
 -- Incluir no relatório o total de vendas por mês (R$)
 -- Incluir no relatório o total de vendas (R$)
 ------------------------------------------------
-
--}
 
