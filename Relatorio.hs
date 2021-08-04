@@ -6,17 +6,17 @@
 module Relatorio where
 
 main :: IO()
-main = do
+main = do -- pegar input do usuario
     putStrLn ("Digite o tipo do relatorio:" ++ "\n" ++ "3: trimestral \n6: semestral \n12: anual")
     input <- getLine
-    let tipo = (read input :: Int)
+    let tipo = (read input :: Int) -- input eh lido como string
     putStr (relatorio tipo)
 
 tamanho :: Int 
 tamanho = 30
 
-preco::Double
-preco= 3450.30
+preco :: Double
+preco = 3450.30
 
 -- recebe o "tipo" do relatorio
 -- 3 -> trimestral
@@ -35,6 +35,7 @@ cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++
             "Empresa Modelo" ++ imprimirSimbolo 8 '-' ++  "\n" ++
             (imprimirSimbolo tamanho '-') ++ "\n"
 
+-- helper para imprimir simbolos
 imprimirSimbolo :: Int -> Char -> String
 imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
@@ -42,15 +43,21 @@ imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 tituloTabela :: String
 tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 4 '.' ++ "Valor"
 
-corpo12 :: String
-corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 1 12
+-- funcoes para corpo do relatorio
+-- como precisamos diferenciar os tipos de relatorio (trimestral/semestral/anual), 
+-- temos uma funcao para cada
+corpo3 :: Int -> Int -> String
+corpo3 l r = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r ++ (imprimirSimbolo tamanho '-') ++ "\n"
 
 corpo6 :: Int -> Int -> String
 corpo6 l r = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r 
 
-corpo3 :: Int -> Int -> String
-corpo3 l r = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r ++ (imprimirSimbolo tamanho '-') ++ "\n"
+corpo12 :: String
+corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 1 12
 
+-- funcoes recebem dois parametros L e R para indicar o intervalo de meses correspondentes 
+-- precisamos disso para imprimir somente as informacoes correspondentes ao relatorio trimestral
+-- de 4 a 6, por exemplo
 imprimeMeses :: Int -> Int -> String
 imprimeMeses l r 
     | l <= r = imprimeMeses l (r-1) ++ imprimeMes r
@@ -59,6 +66,8 @@ imprimeMeses l r
 imprimeMes :: Int -> String
 imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
 
+-- TODO apagar e usar imprimirSimbolo
+-- helper para imprimir espacos
 imprimePadding :: Int -> String
 imprimePadding 0 = ""
 imprimePadding n = " " ++ imprimePadding (n-1)
@@ -77,10 +86,12 @@ mes 10 = "Outubro" ++ imprimePadding 2
 mes 11 = "Novembro" ++ imprimePadding 1
 mes 12 = "Dezembro" ++ imprimePadding 1
 
+-- TODO apagar e usar imprimirSimbolo
 imprimirTracos :: Int -> String
 imprimirTracos 0 = ""
 imprimirTracos n = "-" ++ imprimirTracos (n-1)
 
+-- TODO deixar mais bonito
 rodape :: Int -> Int -> String
 rodape l r = imprimirTracos tamanho ++ "\n" ++
           plotarGrafico l r ++ "\n" ++
@@ -93,7 +104,7 @@ rodape l r = imprimirTracos tamanho ++ "\n" ++
           "Desvio Padrao: " ++ show (desvioPadraoVendas l r) ++ "\n"
           
 
-
+-- guardar informacoes das vendas
 vendas :: Int -> Int
 vendas 1 = 10
 vendas 2 = 12
@@ -122,11 +133,6 @@ valorVendas l r
 valorVendasMes :: Int -> Double
 valorVendasMes n = fromIntegral (vendas n) * preco
 
---------------------------------------------------------
--- Implementar as funções abaixo utilizando recursão
--- Incluir as informações no relatório de Vendas
---------------------------------------------------------
-
 -- Calcular a maior venda entre o mês l e r, inclusive
 maiorVenda :: Int -> Int -> Int
 maiorVenda l r 
@@ -145,7 +151,7 @@ quantidadeVendaZerada l r
     | l <= r = fromEnum (vendas r == 0) + quantidadeVendaZerada l (r-1)   
     | otherwise = 0
 
--- Calcular a média de vendas no entre o mês 1 e n, inclusive.
+-- Calcular a média de vendas no entre o mês l e r, inclusive.
 mediaVendas :: Int -> Int -> Double
 mediaVendas l r = mediaVendasAux l r (r-l+1)
 
@@ -161,11 +167,14 @@ mediaVendasAux l r d
 desvioPadraoVendas :: Int -> Int -> Double
 desvioPadraoVendas l r = sqrt (desvioPadraoVendasAux l r (r-l+1))
 
+-- auxiliar para guardar o quanto temos que dividir 
+-- TODO talvez fazer melhor, so dividindo no final
 desvioPadraoVendasAux :: Int -> Int -> Int -> Double
 desvioPadraoVendasAux l r n 
     | l <= r = (fromIntegral (vendas r) - mediaVendas l n) * (fromIntegral (vendas r) - mediaVendas l n) / fromIntegral n + desvioPadraoVendasAux l (r-1) n
     | otherwise = 0
 
+-- TODO usar imprimirSimbolo
 imprimeHashtag :: Int -> String
 imprimeHashtag 0 = ""
 imprimeHashtag n = "#" ++ imprimeHashtag (n-1)
