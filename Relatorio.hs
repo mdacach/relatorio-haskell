@@ -6,10 +6,13 @@
 module Relatorio where
 
 main :: IO()
-main = putStr (relatorio 3)
+main = putStr (relatorio 12)
 
 tamanho :: Int 
 tamanho = 30
+
+preco::Double
+preco= 3450.30
 
 -- recebe o "tipo" do relatorio
 -- 3 -> trimestral
@@ -23,22 +26,25 @@ relatorio tipo
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
-cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++
-            "Empresa XPTO" ++ "\n" ++
+cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++ 
+            "Empresa Modelo" ++ imprimirSimbolo 8 '-' ++  "\n" ++
             (imprimirSimbolo tamanho '-') ++ "\n"
 
 imprimirSimbolo :: Int -> Char -> String
 imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 
+tituloTabela :: String
+tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 4 '.' ++ "Valor"
+
 corpo12 :: String
-corpo12 = " Relatorio anual \n" ++ imprimeMeses 12
+corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 12
 
 corpo6 :: String
-corpo6 = " Relatorio semestral \n" ++ imprimeMeses 6
+corpo6 = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 6 
 
 corpo3 :: String
-corpo3 = " Relatorion trimestral \n" ++ imprimeMeses 3
+corpo3 = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 3 ++ (imprimirSimbolo tamanho '-') ++ "\n"
 
 imprimeMeses :: Int -> String
 imprimeMeses 1 = imprimeMes 1
@@ -94,10 +100,6 @@ somaVendas :: Int -> Int
 somaVendas 1 = vendas 1
 somaVendas n = vendas n + somaVendas (n-1)
 
-preco :: Double
-preco = 3450.30
-
-
 valorVendas :: Int -> Double
 valorVendas 0 = 0
 valorVendas n = fromIntegral (vendas n) * preco  + valorVendas (n-1)
@@ -151,4 +153,3 @@ desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromInt
 -- Gerar relatório trimestral, semestral, anual, ... (função relatório deve receber parâmetro!!!)
 -- relatorio :: Int -> String
 ------------------------------------------------
-
