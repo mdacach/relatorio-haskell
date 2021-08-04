@@ -20,9 +20,9 @@ preco= 3450.30
 -- 12 -> anual
 relatorio :: Int -> String
 relatorio tipo 
-    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 ++ "\n" ++ rodape 3
-    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 ++ "\n" ++ rodape 6
-    | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 12
+    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 ++ "\n" ++ rodape 1 3
+    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 ++ "\n" ++ rodape 1 6
+    | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 1 12
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
@@ -58,7 +58,6 @@ imprimePadding 0 = ""
 imprimePadding n = " " ++ imprimePadding (n-1)
 
 mes :: Int -> String
-<<<<<<< HEAD
 mes 1 = "Janeiro" ++ imprimePadding 2
 mes 2 = "Fevereiro" ++ imprimePadding 0
 mes 3 = "Marco" ++ imprimePadding 4
@@ -76,16 +75,16 @@ imprimirTracos :: Int -> String
 imprimirTracos 0 = ""
 imprimirTracos n = "-" ++ imprimirTracos (n-1)
 
-rodape :: Int -> String
-rodape n = imprimirTracos tamanho ++ "\n" ++
-          plotarGrafico n ++ "\n" ++
-          "Soma Total:" ++ show (somaVendas n) ++ "\n" ++
-          "Total vendas: " ++ show (valorVendas n) ++ "\n" ++
-          "Maior Venda: " ++ show (maiorVenda n) ++ "\n" ++
-          "Venda Zerada? " ++ show (vendaZerada n) ++ "\n" ++
-          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada n) ++ "\n" ++
-          "Media de Vendas: " ++ show (mediaVendas n) ++ "\n" ++
-          "Desvio Padrao: " ++ show (desvioPadraoVendas n) ++ "\n"
+rodape :: Int -> Int -> String
+rodape l r = imprimirTracos tamanho ++ "\n" ++
+          plotarGrafico l r ++ "\n" ++
+          "Soma Total:" ++ show (somaVendas l r) ++ "\n" ++
+          "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
+          "Maior Venda: " ++ show (maiorVenda l r) ++ "\n" ++
+          "Venda Zerada? " ++ show (vendaZerada l r) ++ "\n" ++
+          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada l r) ++ "\n" ++
+          "Media de Vendas: " ++ show (mediaVendas l r) ++ "\n" ++
+          "Desvio Padrao: " ++ show (desvioPadraoVendas l r) ++ "\n"
           
 
 
@@ -104,13 +103,15 @@ vendas 11 = 22
 vendas 12 = 18
 vendas _  = 0
 
-somaVendas :: Int -> Int
-somaVendas 1 = vendas 1
-somaVendas n = vendas n + somaVendas (n-1)
+somaVendas :: Int -> Int -> Int
+somaVendas l r 
+    | l <= r = vendas r + somaVendas l (r-1)
+    | otherwise = 0
 
-valorVendas :: Int -> Double
-valorVendas 0 = 0
-valorVendas n = fromIntegral (vendas n) * preco  + valorVendas (n-1)
+valorVendas :: Int -> Int -> Double
+valorVendas l r
+    | l <= r = fromIntegral (vendas r) * preco  + valorVendas l (r-1)
+    | otherwise = 0
 
 valorVendasMes :: Int -> Double
 valorVendasMes n = fromIntegral (vendas n) * preco
@@ -120,44 +121,53 @@ valorVendasMes n = fromIntegral (vendas n) * preco
 -- Incluir as informações no relatório de Vendas
 --------------------------------------------------------
 
--- Calcular a maior venda entre o mês 1 e n, inclusive
-maiorVenda :: Int -> Int
-maiorVenda 1 = vendas 1
-maiorVenda n = max (vendas n) (maiorVenda (n-1)) 
+-- Calcular a maior venda entre o mês l e r, inclusive
+maiorVenda :: Int -> Int -> Int
+maiorVenda l r 
+    | l <= r = max (vendas r) (maiorVenda l (r-1)) 
+    | otherwise = 0 
 
--- Verificar se há venda zerada entre o mês 1 e n, inclusive.
-vendaZerada :: Int -> Bool
-vendaZerada 1 = (vendas 1 == 0)
-vendaZerada n = (vendas n == 0) || vendaZerada (n-1)
+-- Verificar se há venda zerada entre o mês l e r, inclusive.
+vendaZerada :: Int -> Int -> Bool
+vendaZerada l r 
+    | l <= r = (vendas r == 0) || vendaZerada l (r-1)
+    | otherwise = False
 
--- Retorna a quantidade de vendas zeradas entre o mês 1 e n, inclusive
-quantidadeVendaZerada :: Int -> Int
-quantidadeVendaZerada 1 = fromEnum (vendas 1 == 0)
-quantidadeVendaZerada n = fromEnum (vendas n == 0) + quantidadeVendaZerada (n-1) 
+-- Retorna a quantidade de vendas zeradas entre o mês l e r, inclusive
+quantidadeVendaZerada :: Int -> Int -> Int
+quantidadeVendaZerada l r 
+    | l <= r = fromEnum (vendas r == 0) + quantidadeVendaZerada l (r-1)   
+    | otherwise = 0
 
 -- Calcular a média de vendas no entre o mês 1 e n, inclusive.
-mediaVendas :: Int -> Double
-mediaVendas n = mediaVendasAux n n
+mediaVendas :: Int -> Int -> Double
+mediaVendas l r = mediaVendasAux l r (r-l+1)
 
-mediaVendasAux :: Int -> Int -> Double
-mediaVendasAux 0 n = 0
-mediaVendasAux i n = (fromIntegral (vendas i)) / (fromIntegral n) + mediaVendasAux (i-1) n
+-- l -> mes inicial
+-- r -> mes final (e que esta sendo contado agora)
+-- d -> valor para dividir (numero de meses originalmente)
+mediaVendasAux :: Int -> Int -> Int -> Double
+mediaVendasAux l r d 
+    | l <= r = (fromIntegral (vendas r)) / (fromIntegral d) + mediaVendasAux l (r-1) d
+    | otherwise = 0
 
 -- Calcular desvio padrao de vendas no entre o mês 1 e n, inclusive.
-desvioPadraoVendas :: Int -> Double
-desvioPadraoVendas n = sqrt (desvioPadraoVendasAux n n)
+desvioPadraoVendas :: Int -> Int -> Double
+desvioPadraoVendas l r = sqrt (desvioPadraoVendasAux l r (r-l+1))
 
-desvioPadraoVendasAux :: Int -> Int -> Double
-desvioPadraoVendasAux 0 n = 0.0
-desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromIntegral (vendas i) - mediaVendas n) / fromIntegral n + desvioPadraoVendasAux (i-1) n
+desvioPadraoVendasAux :: Int -> Int -> Int -> Double
+desvioPadraoVendasAux l r n 
+    | l <= r = (fromIntegral (vendas r) - mediaVendas l n) * (fromIntegral (vendas r) - mediaVendas l n) / fromIntegral n + desvioPadraoVendasAux l (r-1) n
+    | otherwise = 0
 
 imprimeHashtag :: Int -> String
 imprimeHashtag 0 = ""
 imprimeHashtag n = "#" ++ imprimeHashtag (n-1)
 
-plotarGrafico :: Int -> String
-plotarGrafico 0 = ""
-plotarGrafico n = plotarGrafico (n-1) ++ mes n ++ " " ++ imprimeHashtag (vendas n) ++ "\n"
+plotarGrafico :: Int -> Int -> String
+plotarGrafico l r 
+    | l <= r = plotarGrafico l (r-1) ++ mes r ++ " " ++ imprimeHashtag (vendas r) ++ "\n"
+    | otherwise = ""
 
 
 ------------------------------------------------
