@@ -24,10 +24,23 @@ precoProduto = 3450.30
 -- 12 -> anual
 relatorio :: Int -> String
 relatorio tipo 
-    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 1 3 ++ "\n" ++ rodape 1 3 ++ "\n" ++ corpo3 4 6 ++ "\n" ++ rodape 4 6 ++ "\n" ++
-                                       corpo3 7 9 ++ "\n" ++ rodape 7 9 ++ "\n" ++ corpo3 10 12 ++ "\n" ++ rodape 10 12
-    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 1 6 ++ "\n" ++ rodape 1 6 ++ "\n" ++ corpo6 7 12 ++ "\n" ++ rodape 7 12
-    | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 1 12
+    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 1 3 ++ "\n" ++ rodape 1 3 ++ "\n" ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
+                                       corpo3 4 6 ++ "\n" ++ rodape 4 6 ++ "\n" ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
+                                       corpo3 7 9 ++ "\n" ++ rodape 7 9 ++ "\n" ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
+                                       corpo3 10 12 ++ "\n" ++ rodape 10 12 ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n"
+                                        
+    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 1 6 ++ "\n" ++ rodape 1 6 ++ "\n" ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
+                                       corpo6 7 12 ++ "\n" ++ rodape 7 12 ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n"
+
+    | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 1 12 ++
+                                       imprimirSimbolo tamanhoHeader '-' ++ "\n"
+
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
@@ -84,12 +97,13 @@ mes 12 = "Dezembro" ++ imprimirSimbolo 1 ' '
 -- TODO deixar mais bonito
 rodape :: Int -> Int -> String
 rodape l r = imprimirSimbolo tamanhoHeader '-' ++ "\n" ++
-          plotarGrafico l r ++ "\n" ++
-          "Soma Total:" ++ show (somaVendas l r) ++ "\n" ++
+          "Grafico de vendas:\n" ++ plotarGrafico l r ++ "\n" ++
+           imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
+          "Soma Total: " ++ show (somaVendas l r) ++ "\n" ++
           "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
           "Maior Venda: " ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
           "Venda Zerada? " ++ show (vendaZerada l r) ++ "\n" ++
-          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada l r) ++ "\n" ++
+          "Quantidade Vendas Zeradas " ++ show (quantidadeVendaZerada l r) ++ "\n" ++
           "Media de Vendas: " ++ show (mediaVendas l r) ++ "\n" ++
           "Desvio Padrao: " ++ show (desvioPadraoVendas l r) ++ "\n"
           
@@ -129,15 +143,15 @@ maiorVenda l r
     | l <= r = max (vendas r) (maiorVenda l (r-1)) 
     | otherwise = 0 
 
+-- Mes onde ocorre maior venda
 maiorVendaMes :: Int -> Int -> String
 maiorVendaMes l r = maiorVendaMesAux l r r
 
 maiorVendaMesAux :: Int -> Int -> Int -> String
 maiorVendaMesAux l r cur
-    | l <= r && (vendas cur == maiorVenda l r) = mes cur
+    | l <= r && (vendas cur == maiorVenda l r) = mes cur -- usa funcao ja feita
     | l <= r = maiorVendaMesAux l r (cur-1)
     | otherwise = ""
-
 
 
 
