@@ -6,13 +6,21 @@
 module Relatorio where
 
 main :: IO()
-main = putStr relatorio
+main = putStr (relatorio 3)
 
 tamanho :: Int 
 tamanho = 30
 
-relatorio :: String
-relatorio = cabecalho ++ "\n" ++ corpo ++ "\n" ++ rodape
+-- recebe o "tipo" do relatorio
+-- 3 -> trimestral
+-- 6 -> semestral
+-- 12 -> anual
+relatorio :: Int -> String
+relatorio tipo 
+    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 ++ "\n" ++ rodape 3
+    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 ++ "\n" ++ rodape 6
+    | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 12
+    | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
 cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++
@@ -23,8 +31,14 @@ imprimirSimbolo :: Int -> Char -> String
 imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 
-corpo :: String
-corpo = imprimeMeses 12
+corpo12 :: String
+corpo12 = " Relatorio anual \n" ++ imprimeMeses 12
+
+corpo6 :: String
+corpo6 = " Relatorio semestral \n" ++ imprimeMeses 6
+
+corpo3 :: String
+corpo3 = " Relatorion trimestral \n" ++ imprimeMeses 3
 
 imprimeMeses :: Int -> String
 imprimeMeses 1 = imprimeMes 1
@@ -51,15 +65,15 @@ imprimirTracos :: Int -> String
 imprimirTracos 0 = ""
 imprimirTracos n = "-" ++ imprimirTracos (n-1)
 
-rodape :: String
-rodape =  imprimirTracos tamanho ++ "\n" ++
-          "Soma Total:" ++ show (somaVendas 12) ++ "\n" ++
-          "Total vendas: " ++ show (valorVendas 12) ++ "\n" ++
-          "Maior Venda: " ++ show (maiorVenda 12) ++ "\n" ++
-          "Venda Zerada? " ++ show (vendaZerada 12) ++ "\n" ++
-          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada 12) ++ "\n" ++
-          "Media de Vendas: " ++ show (mediaVendas 12) ++ "\n" ++
-          "Desvio Padrao: " ++ show (desvioPadraoVendas 12) ++ "\n"
+rodape :: Int -> String
+rodape n = imprimirTracos tamanho ++ "\n" ++
+          "Soma Total:" ++ show (somaVendas n) ++ "\n" ++
+          "Total vendas: " ++ show (valorVendas n) ++ "\n" ++
+          "Maior Venda: " ++ show (maiorVenda n) ++ "\n" ++
+          "Venda Zerada? " ++ show (vendaZerada n) ++ "\n" ++
+          "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada n) ++ "\n" ++
+          "Media de Vendas: " ++ show (mediaVendas n) ++ "\n" ++
+          "Desvio Padrao: " ++ show (desvioPadraoVendas n) ++ "\n"
 
 vendas :: Int -> Int
 vendas 1 = 10
@@ -136,7 +150,5 @@ desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromInt
 -- Criar função Haskell para plotar gráfico de vendas 
 -- Gerar relatório trimestral, semestral, anual, ... (função relatório deve receber parâmetro!!!)
 -- relatorio :: Int -> String
--- Incluir no relatório o total de vendas por mês (R$)
--- Incluir no relatório o total de vendas (R$)
 ------------------------------------------------
 
