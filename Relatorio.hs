@@ -11,6 +11,9 @@ main = putStr (relatorio 12)
 tamanho :: Int 
 tamanho = 30
 
+preco::Double
+preco= 3450.30
+
 -- recebe o "tipo" do relatorio
 -- 3 -> trimestral
 -- 6 -> semestral
@@ -23,22 +26,25 @@ relatorio tipo
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
-cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++
-            "Empresa XPTO" ++ "\n" ++
+cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++ 
+            "Empresa Modelo" ++ imprimirSimbolo 8 '-' ++  "\n" ++
             (imprimirSimbolo tamanho '-') ++ "\n"
 
 imprimirSimbolo :: Int -> Char -> String
 imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 
+tituloTabela :: String
+tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 4 '.' ++ "Valor"
+
 corpo12 :: String
-corpo12 = " Relatorio anual \n" ++ imprimeMeses 12
+corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 12
 
 corpo6 :: String
-corpo6 = " Relatorio semestral \n" ++ imprimeMeses 6
+corpo6 = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 6 
 
 corpo3 :: String
-corpo3 = " Relatorion trimestral \n" ++ imprimeMeses 3
+corpo3 = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 3 ++ (imprimirSimbolo tamanho '-') ++ "\n"
 
 imprimeMeses :: Int -> String
 imprimeMeses 1 = imprimeMes 1
@@ -52,6 +58,7 @@ imprimePadding 0 = ""
 imprimePadding n = " " ++ imprimePadding (n-1)
 
 mes :: Int -> String
+<<<<<<< HEAD
 mes 1 = "Janeiro" ++ imprimePadding 2
 mes 2 = "Fevereiro" ++ imprimePadding 0
 mes 3 = "Marco" ++ imprimePadding 4
@@ -100,10 +107,6 @@ vendas _  = 0
 somaVendas :: Int -> Int
 somaVendas 1 = vendas 1
 somaVendas n = vendas n + somaVendas (n-1)
-
-preco :: Double
-preco = 3450.30
-
 
 valorVendas :: Int -> Double
 valorVendas 0 = 0
@@ -163,4 +166,3 @@ plotarGrafico n = plotarGrafico (n-1) ++ mes n ++ " " ++ imprimeHashtag (vendas 
 -- Melhorar layout do relatório conforme tamanho
 -- Centralizar os títulos 
 ------------------------------------------------
-
