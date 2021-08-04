@@ -31,7 +31,7 @@ imprimeMeses 1 = imprimeMes 1
 imprimeMeses n = imprimeMeses (n-1) ++ imprimeMes n
 
 imprimeMes :: Int -> String
-imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "\n"
+imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
 
 mes :: Int -> String
 mes 1 = "Janeiro"
@@ -79,6 +79,17 @@ somaVendas :: Int -> Int
 somaVendas 1 = vendas 1
 somaVendas n = vendas n + somaVendas (n-1)
 
+preco :: Double
+preco = 3450.30
+
+
+valorVendas :: Int -> Double
+valorVendas 0 = 0
+valorVendas n = fromIntegral (vendas n) * preco  + valorVendas (n-1)
+
+valorVendasMes :: Int -> Double
+valorVendasMes n = fromIntegral (vendas n) * preco
+
 --------------------------------------------------------
 -- Implementar as funções abaixo utilizando recursão
 -- Incluir as informações no relatório de Vendas
@@ -116,19 +127,14 @@ desvioPadraoVendasAux 0 n = 0.0
 desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromIntegral (vendas i) - mediaVendas n) / fromIntegral n + desvioPadraoVendasAux (i-1) n
 
 
-
-
 ------------------------------------------------
 -- TO DO:
 
 -- Melhorar layout do relatório conforme tamanho
 -- Centralizar os títulos 
--- Calcular desvio padrão
 -- Criar função Haskell para plotar gráfico de vendas 
 -- Gerar relatório trimestral, semestral, anual, ... (função relatório deve receber parâmetro!!!)
 -- relatorio :: Int -> String
--- Incluir preço do produto. 
--- preco = 3450.30
 -- Incluir no relatório o total de vendas por mês (R$)
 -- Incluir no relatório o total de vendas (R$)
 ------------------------------------------------
