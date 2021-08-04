@@ -12,11 +12,11 @@ main = do -- pegar input do usuario
     let tipo = (read input :: Int) -- input eh lido como string
     putStr (relatorio tipo)
 
-tamanho :: Int 
-tamanho = 30
+tamanhoHeader :: Int 
+tamanhoHeader = 30
 
-preco :: Double
-preco = 3450.30
+precoProduto :: Double
+precoProduto = 3450.30
 
 -- recebe o "tipo" do relatorio
 -- 3 -> trimestral
@@ -31,9 +31,9 @@ relatorio tipo
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
-cabecalho = (imprimirSimbolo tamanho '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++ 
+cabecalho = (imprimirSimbolo tamanhoHeader '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++ 
             "Empresa Modelo" ++ imprimirSimbolo 8 '-' ++  "\n" ++
-            (imprimirSimbolo tamanho '-') ++ "\n"
+            (imprimirSimbolo tamanhoHeader '-') ++ "\n"
 
 -- helper para imprimir simbolos
 imprimirSimbolo :: Int -> Char -> String
@@ -47,13 +47,13 @@ tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 
 -- como precisamos diferenciar os tipos de relatorio (trimestral/semestral/anual), 
 -- temos uma funcao para cada
 corpo3 :: Int -> Int -> String
-corpo3 l r = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r ++ (imprimirSimbolo tamanho '-') ++ "\n"
+corpo3 l r = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r ++ (imprimirSimbolo tamanhoHeader '-') ++ "\n"
 
 corpo6 :: Int -> Int -> String
-corpo6 l r = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r 
+corpo6 l r = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanhoHeader '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r 
 
 corpo12 :: String
-corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 1 12
+corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanhoHeader '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 1 12
 
 -- funcoes recebem dois parametros L e R para indicar o intervalo de meses correspondentes 
 -- precisamos disso para imprimir somente as informacoes correspondentes ao relatorio trimestral
@@ -83,7 +83,7 @@ mes 12 = "Dezembro" ++ imprimirSimbolo 1 ' '
 
 -- TODO deixar mais bonito
 rodape :: Int -> Int -> String
-rodape l r = imprimirSimbolo tamanho '-' ++ "\n" ++
+rodape l r = imprimirSimbolo tamanhoHeader '-' ++ "\n" ++
           plotarGrafico l r ++ "\n" ++
           "Soma Total:" ++ show (somaVendas l r) ++ "\n" ++
           "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
@@ -117,11 +117,11 @@ somaVendas l r
 
 valorVendas :: Int -> Int -> Double
 valorVendas l r
-    | l <= r = fromIntegral (vendas r) * preco  + valorVendas l (r-1)
+    | l <= r = fromIntegral (vendas r) * precoProduto  + valorVendas l (r-1)
     | otherwise = 0
 
 valorVendasMes :: Int -> Double
-valorVendasMes n = fromIntegral (vendas n) * preco
+valorVendasMes n = fromIntegral (vendas n) * precoProduto
 
 -- Calcular a maior venda entre o mês l e r, inclusive
 maiorVenda :: Int -> Int -> Int
@@ -172,6 +172,6 @@ plotarGrafico l r
 ------------------------------------------------
 -- TO DO:
 
--- Melhorar layout do relatório conforme tamanho
+-- Melhorar layout do relatório conforme tamanhoHeader
 -- Centralizar os títulos 
 ------------------------------------------------
