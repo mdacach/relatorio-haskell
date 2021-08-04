@@ -6,7 +6,7 @@
 module Relatorio where
 
 main :: IO()
-main = putStr (relatorio 12)
+main = putStr (relatorio 6)
 
 tamanho :: Int 
 tamanho = 30
@@ -20,8 +20,9 @@ preco= 3450.30
 -- 12 -> anual
 relatorio :: Int -> String
 relatorio tipo 
-    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 ++ "\n" ++ rodape 1 3
-    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 ++ "\n" ++ rodape 1 6
+    | tipo == 3 = cabecalho ++ "\n" ++ corpo3 1 3 ++ "\n" ++ rodape 1 3 ++ "\n" ++ corpo3 4 6 ++ "\n" ++ rodape 4 6 ++ "\n" ++
+                                       corpo3 7 9 ++ "\n" ++ rodape 7 9 ++ "\n" ++ corpo3 10 12 ++ "\n" ++ rodape 10 12
+    | tipo == 6 = cabecalho ++ "\n" ++ corpo6 1 6 ++ "\n" ++ rodape 1 6 ++ "\n" ++ corpo6 7 12 ++ "\n" ++ rodape 7 12
     | tipo == 12 = cabecalho ++ "\n" ++ corpo12 ++ "\n" ++ rodape 1 12
     | otherwise = "Tipo de relatorio invalido"
 
@@ -38,17 +39,18 @@ tituloTabela :: String
 tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 4 '.' ++ "Valor"
 
 corpo12 :: String
-corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 12
+corpo12 = (imprimirSimbolo 5 ' ') ++ "Relatorio anual\n" ++ (imprimirSimbolo tamanho '-') ++ "\n"++ tituloTabela ++ "\n" ++imprimeMeses 1 12
 
-corpo6 :: String
-corpo6 = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 6 
+corpo6 :: Int -> Int -> String
+corpo6 l r = (imprimirSimbolo 5 ' ') ++ "Relatorio semestral\n" ++ (imprimirSimbolo tamanho '-') ++ "\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r 
 
-corpo3 :: String
-corpo3 = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses 3 ++ (imprimirSimbolo tamanho '-') ++ "\n"
+corpo3 :: Int -> Int -> String
+corpo3 l r = (imprimirSimbolo 7 ' ') ++ "Relatorio trimestral\n" ++ tituloTabela ++ "\n" ++ imprimeMeses l r ++ (imprimirSimbolo tamanho '-') ++ "\n"
 
-imprimeMeses :: Int -> String
-imprimeMeses 1 = imprimeMes 1
-imprimeMeses n = imprimeMeses (n-1) ++ imprimeMes n
+imprimeMeses :: Int -> Int -> String
+imprimeMeses l r 
+    | l <= r = imprimeMeses l (r-1) ++ imprimeMes r
+    | otherwise = ""
 
 imprimeMes :: Int -> String
 imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
