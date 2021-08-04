@@ -99,14 +99,13 @@ rodape :: Int -> Int -> String
 rodape l r = imprimirSimbolo tamanhoHeader '-' ++ "\n" ++
           "Grafico de vendas:\n" ++ plotarGrafico l r ++ "\n" ++
            imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
-          "Soma Total: " ++ show (somaVendas l r) ++ "\n" ++
-          "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
-          "Maior Venda: " ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
-          "Venda Zerada? " ++ show (vendaZerada l r) ++ "\n" ++
-          "Quantidade Vendas Zeradas " ++ show (quantidadeVendaZerada l r) ++ "\n" ++
-          "Media de Vendas: " ++ show (mediaVendas l r) ++ "\n" ++
-          "Desvio Padrao: " ++ show (desvioPadraoVendas l r) ++ "\n"
-          
+          "Soma Total: " ++ imprimirSimbolo 23 ' ' ++ show (somaVendas l r) ++ "\n" ++
+          "Total vendas: " ++ imprimirSimbolo 7 ' ' ++ show (valorVendas l r) ++ "\n" ++
+          "Maior Venda: " ++ imprimirSimbolo 15 ' '  ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
+          "Venda Zerada? " ++ imprimirSimbolo 20 ' '  ++ show (vendaZerada l r) ++ "\n" ++
+          "Quantidade Vendas Zeradas? " ++ imprimirSimbolo 9 ' '  ++ show (quantidadeVendaZerada l r) ++ "\n" ++
+          "Media de Vendas: " ++ imprimirSimbolo 2 ' '  ++ show (mediaVendas l r) ++ "\n" ++
+          "Desvio Padrao: "++ imprimirSimbolo 5 ' '  ++ show (desvioPadraoVendas l r) ++ "\n"
 
 -- guardar informacoes das vendas
 vendas :: Int -> Int
