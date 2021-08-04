@@ -66,34 +66,24 @@ imprimeMeses l r
 imprimeMes :: Int -> String
 imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
 
--- TODO apagar e usar imprimirSimbolo
--- helper para imprimir espacos
-imprimePadding :: Int -> String
-imprimePadding 0 = ""
-imprimePadding n = " " ++ imprimePadding (n-1)
 
 mes :: Int -> String
-mes 1 = "Janeiro" ++ imprimePadding 2
-mes 2 = "Fevereiro" ++ imprimePadding 0
-mes 3 = "Marco" ++ imprimePadding 4
-mes 4 = "Abril" ++ imprimePadding 4
-mes 5 = "Maio" ++ imprimePadding 5
-mes 6 = "Junho" ++ imprimePadding 4
-mes 7 = "Julho" ++ imprimePadding 4
-mes 8 = "Agosto" ++ imprimePadding 3
-mes 9 = "Setembro" ++ imprimePadding 1
-mes 10 = "Outubro" ++ imprimePadding 2
-mes 11 = "Novembro" ++ imprimePadding 1
-mes 12 = "Dezembro" ++ imprimePadding 1
-
--- TODO apagar e usar imprimirSimbolo
-imprimirTracos :: Int -> String
-imprimirTracos 0 = ""
-imprimirTracos n = "-" ++ imprimirTracos (n-1)
+mes 1 = "Janeiro" ++ imprimirSimbolo 2 ' '
+mes 2 = "Fevereiro" ++ imprimirSimbolo 0 ' '
+mes 3 = "Marco" ++ imprimirSimbolo 4 ' '
+mes 4 = "Abril" ++ imprimirSimbolo 4 ' '
+mes 5 = "Maio" ++ imprimirSimbolo 5 ' '
+mes 6 = "Junho" ++ imprimirSimbolo 4 ' '
+mes 7 = "Julho" ++ imprimirSimbolo 4 ' '
+mes 8 = "Agosto" ++ imprimirSimbolo 3 ' '
+mes 9 = "Setembro" ++ imprimirSimbolo 1 ' '
+mes 10 = "Outubro" ++ imprimirSimbolo 2 ' '
+mes 11 = "Novembro" ++ imprimirSimbolo 1 ' '
+mes 12 = "Dezembro" ++ imprimirSimbolo 1 ' '
 
 -- TODO deixar mais bonito
 rodape :: Int -> Int -> String
-rodape l r = imprimirTracos tamanho ++ "\n" ++
+rodape l r = imprimirSimbolo tamanho '-' ++ "\n" ++
           plotarGrafico l r ++ "\n" ++
           "Soma Total:" ++ show (somaVendas l r) ++ "\n" ++
           "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
@@ -174,16 +164,10 @@ desvioPadraoVendasAux l r n
     | l <= r = (fromIntegral (vendas r) - mediaVendas l n) * (fromIntegral (vendas r) - mediaVendas l n) / fromIntegral n + desvioPadraoVendasAux l (r-1) n
     | otherwise = 0
 
--- TODO usar imprimirSimbolo
-imprimeHashtag :: Int -> String
-imprimeHashtag 0 = ""
-imprimeHashtag n = "#" ++ imprimeHashtag (n-1)
-
 plotarGrafico :: Int -> Int -> String
 plotarGrafico l r 
-    | l <= r = plotarGrafico l (r-1) ++ mes r ++ " " ++ imprimeHashtag (vendas r) ++ "\n"
+    | l <= r = plotarGrafico l (r-1) ++ mes r ++ " " ++ imprimirSimbolo (vendas r) '#' ++ "\n"
     | otherwise = ""
-
 
 ------------------------------------------------
 -- TO DO:
