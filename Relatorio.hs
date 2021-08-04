@@ -54,6 +54,7 @@ imprimirTracos n = "-" ++ imprimirTracos (n-1)
 rodape :: String
 rodape =  imprimirTracos tamanho ++ "\n" ++
           "Soma Total:" ++ show (somaVendas 12) ++ "\n" ++
+          "Total vendas: " ++ show (valorVendas 12) ++ "\n" ++
           "Maior Venda: " ++ show (maiorVenda 12) ++ "\n" ++
           "Venda Zerada? " ++ show (vendaZerada 12) ++ "\n" ++
           "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada 12) ++ "\n" ++
