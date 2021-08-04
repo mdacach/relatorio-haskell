@@ -47,19 +47,23 @@ imprimeMeses n = imprimeMeses (n-1) ++ imprimeMes n
 imprimeMes :: Int -> String
 imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
 
+imprimePadding :: Int -> String
+imprimePadding 0 = ""
+imprimePadding n = " " ++ imprimePadding (n-1)
+
 mes :: Int -> String
-mes 1 = "Janeiro"
-mes 2 = "Fevereiro"
-mes 3 = "Marco"
-mes 4 = "Abril"
-mes 5 = "Maio"
-mes 6 = "Junho"
-mes 7 = "Julho"
-mes 8 = "Agosto"
-mes 9 = "Setembro"
-mes 10 = "Outubro"
-mes 11 = "Novembro"
-mes 12 = "Dezembro"
+mes 1 = "Janeiro" ++ imprimePadding 2
+mes 2 = "Fevereiro" ++ imprimePadding 0
+mes 3 = "Marco" ++ imprimePadding 4
+mes 4 = "Abril" ++ imprimePadding 4
+mes 5 = "Maio" ++ imprimePadding 5
+mes 6 = "Junho" ++ imprimePadding 4
+mes 7 = "Julho" ++ imprimePadding 4
+mes 8 = "Agosto" ++ imprimePadding 3
+mes 9 = "Setembro" ++ imprimePadding 1
+mes 10 = "Outubro" ++ imprimePadding 2
+mes 11 = "Novembro" ++ imprimePadding 1
+mes 12 = "Dezembro" ++ imprimePadding 1
 
 imprimirTracos :: Int -> String
 imprimirTracos 0 = ""
@@ -158,6 +162,5 @@ plotarGrafico n = plotarGrafico (n-1) ++ mes n ++ " " ++ imprimeHashtag (vendas 
 
 -- Melhorar layout do relatório conforme tamanho
 -- Centralizar os títulos 
--- Criar função Haskell para plotar gráfico de vendas 
 ------------------------------------------------
 
