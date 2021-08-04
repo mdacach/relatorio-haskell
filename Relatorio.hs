@@ -87,7 +87,7 @@ rodape l r = imprimirSimbolo tamanhoHeader '-' ++ "\n" ++
           plotarGrafico l r ++ "\n" ++
           "Soma Total:" ++ show (somaVendas l r) ++ "\n" ++
           "Total vendas: " ++ show (valorVendas l r) ++ "\n" ++
-          "Maior Venda: " ++ show (maiorVenda l r) ++ "\n" ++
+          "Maior Venda: " ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
           "Venda Zerada? " ++ show (vendaZerada l r) ++ "\n" ++
           "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada l r) ++ "\n" ++
           "Media de Vendas: " ++ show (mediaVendas l r) ++ "\n" ++
@@ -128,6 +128,18 @@ maiorVenda :: Int -> Int -> Int
 maiorVenda l r 
     | l <= r = max (vendas r) (maiorVenda l (r-1)) 
     | otherwise = 0 
+
+maiorVendaMes :: Int -> Int -> String
+maiorVendaMes l r = maiorVendaMesAux l r r
+
+maiorVendaMesAux :: Int -> Int -> Int -> String
+maiorVendaMesAux l r cur
+    | l <= r && (vendas cur == maiorVenda l r) = mes cur
+    | l <= r = maiorVendaMesAux l r (cur-1)
+    | otherwise = ""
+
+
+
 
 -- Verificar se há venda zerada entre o mês l e r, inclusive.
 vendaZerada :: Int -> Int -> Bool
