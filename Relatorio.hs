@@ -6,7 +6,7 @@
 module Relatorio where
 
 main :: IO()
-main = putStr (relatorio 3)
+main = putStr (relatorio 12)
 
 tamanho :: Int 
 tamanho = 30
@@ -67,6 +67,7 @@ imprimirTracos n = "-" ++ imprimirTracos (n-1)
 
 rodape :: Int -> String
 rodape n = imprimirTracos tamanho ++ "\n" ++
+          plotarGrafico n ++ "\n" ++
           "Soma Total:" ++ show (somaVendas n) ++ "\n" ++
           "Total vendas: " ++ show (valorVendas n) ++ "\n" ++
           "Maior Venda: " ++ show (maiorVenda n) ++ "\n" ++
@@ -74,6 +75,8 @@ rodape n = imprimirTracos tamanho ++ "\n" ++
           "Quantidade Vendas Zeradas? " ++ show (quantidadeVendaZerada n) ++ "\n" ++
           "Media de Vendas: " ++ show (mediaVendas n) ++ "\n" ++
           "Desvio Padrao: " ++ show (desvioPadraoVendas n) ++ "\n"
+          
+
 
 vendas :: Int -> Int
 vendas 1 = 10
@@ -141,6 +144,14 @@ desvioPadraoVendasAux :: Int -> Int -> Double
 desvioPadraoVendasAux 0 n = 0.0
 desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromIntegral (vendas i) - mediaVendas n) / fromIntegral n + desvioPadraoVendasAux (i-1) n
 
+imprimeHashtag :: Int -> String
+imprimeHashtag 0 = ""
+imprimeHashtag n = "#" ++ imprimeHashtag (n-1)
+
+plotarGrafico :: Int -> String
+plotarGrafico 0 = ""
+plotarGrafico n = plotarGrafico (n-1) ++ mes n ++ " " ++ imprimeHashtag (vendas n) ++ "\n"
+
 
 ------------------------------------------------
 -- TO DO:
@@ -148,7 +159,5 @@ desvioPadraoVendasAux i n = (fromIntegral (vendas i) - mediaVendas n) * (fromInt
 -- Melhorar layout do relatório conforme tamanho
 -- Centralizar os títulos 
 -- Criar função Haskell para plotar gráfico de vendas 
--- Gerar relatório trimestral, semestral, anual, ... (função relatório deve receber parâmetro!!!)
--- relatorio :: Int -> String
 ------------------------------------------------
 
