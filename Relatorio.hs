@@ -6,7 +6,11 @@
 module Relatorio where
 
 main :: IO()
-main = putStr (relatorio 6)
+main = do
+    putStrLn ("Digite o tipo do relatorio:" ++ "\n" ++ "3: trimestral \n6: semestral \n12: anual")
+    input <- getLine
+    let tipo = (read input :: Int)
+    putStr (relatorio tipo)
 
 tamanho :: Int 
 tamanho = 30
