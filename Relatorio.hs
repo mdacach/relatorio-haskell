@@ -1,6 +1,9 @@
 ---------------------------------------------------------
 -- Relatorio.hs
 -- Para executar digitar: runghc Relatorio.hs
+-- Atividade de Programacao Declarativa
+-- Matheus Dacach M. R. Cardoso
+-- Michele dos Santos O. C. Cotrim
 ---------------------------------------------------------
 
 module Relatorio where
@@ -13,7 +16,7 @@ main = do -- pegar input do usuario
     putStr (relatorio tipo)
 
 tamanhoHeader :: Int 
-tamanhoHeader = 30
+tamanhoHeader = 40
 
 precoProduto :: Double
 precoProduto = 3450.30
@@ -44,8 +47,8 @@ relatorio tipo
     | otherwise = "Tipo de relatorio invalido"
 
 cabecalho :: String
-cabecalho = (imprimirSimbolo tamanhoHeader '-') ++ "\n" ++ imprimirSimbolo 8 '-' ++ 
-            "Empresa Modelo" ++ imprimirSimbolo 8 '-' ++  "\n" ++
+cabecalho = (imprimirSimbolo tamanhoHeader '-') ++ "\n" ++ imprimirSimbolo (centralizar("Empresa Modelo")) '-' ++ 
+            "Empresa Modelo" ++ imprimirSimbolo (centralizar("Empresa Modelo"))'-' ++  "\n" ++
             (imprimirSimbolo tamanhoHeader '-') ++ "\n"
 
 -- helper para imprimir simbolos
@@ -54,7 +57,7 @@ imprimirSimbolo 0 ch = ""
 imprimirSimbolo n ch = [ch] ++ imprimirSimbolo (n-1) ch
 
 tituloTabela :: String
-tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 4 '.' ++ "Valor"
+tituloTabela = "Meses" ++ imprimirSimbolo 10 '.' ++ "Vendas" ++ imprimirSimbolo 14 '.' ++ "Valor"
 
 -- funcoes para corpo do relatorio
 -- como precisamos diferenciar os tipos de relatorio (trimestral/semestral/anual), 
@@ -77,7 +80,7 @@ imprimeMeses l r
     | otherwise = ""
 
 imprimeMes :: Int -> String
-imprimeMes n = mes n ++ "  " ++ show(vendas n) ++ "  " ++ show (valorVendasMes n) ++ "\n"
+imprimeMes n = mes n ++ imprimirSimbolo 7 ' ' ++ show(vendas n) ++ imprimirSimbolo(aninharDireita(mes n ++ "  " ++ show(vendas n))(show (valorVendasMes n))) ' ' ++ show (valorVendasMes n) ++ "\n"
 
 
 mes :: Int -> String
@@ -99,13 +102,13 @@ rodape :: Int -> Int -> String
 rodape l r = imprimirSimbolo tamanhoHeader '-' ++ "\n" ++
           "Grafico de vendas:\n" ++ plotarGrafico l r ++ "\n" ++
            imprimirSimbolo tamanhoHeader '-' ++ "\n" ++ 
-          "Soma Total: " ++ imprimirSimbolo 23 ' ' ++ show (somaVendas l r) ++ "\n" ++
-          "Total vendas: " ++ imprimirSimbolo 7 ' ' ++ show (valorVendas l r) ++ "\n" ++
-          "Maior Venda: " ++ imprimirSimbolo 15 ' '  ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
-          "Venda Zerada? " ++ imprimirSimbolo 20 ' '  ++ show (vendaZerada l r) ++ "\n" ++
-          "Quantidade Vendas Zeradas? " ++ imprimirSimbolo 9 ' '  ++ show (quantidadeVendaZerada l r) ++ "\n" ++
-          "Media de Vendas: " ++ imprimirSimbolo 2 ' '  ++ show (mediaVendas l r) ++ "\n" ++
-          "Desvio Padrao: "++ imprimirSimbolo 5 ' '  ++ show (desvioPadraoVendas l r) ++ "\n"
+          "Soma Total: " ++ imprimirSimbolo(aninharDireita("Soma Total: ")(show (somaVendas l r))) ' ' ++ show (somaVendas l r) ++ "\n" ++
+          "Total vendas: " ++ imprimirSimbolo(aninharDireita("Total vendas: ")(show (valorVendas l r))) ' ' ++ show (valorVendas l r) ++ "\n" ++
+          "Maior Venda: " ++ imprimirSimbolo (aninharDireita("Maior Venda: ")(show(maiorVenda l r)++ " em " ++ maiorVendaMes l r)) ' '  ++ show (maiorVenda l r) ++ " em " ++ maiorVendaMes l r ++ "\n" ++
+          "Venda Zerada? " ++ imprimirSimbolo (aninharDireita("Venda Zerada? ")(show (vendaZerada l r))) ' '  ++ show (vendaZerada l r) ++ "\n" ++
+          "Quantidade Vendas Zeradas? " ++ imprimirSimbolo(aninharDireita("Quantidade Vendas Zeradas? ")(show (quantidadeVendaZerada l r)))  ' '  ++ show (quantidadeVendaZerada l r) ++ "\n" ++
+          "Media de Vendas: " ++ imprimirSimbolo (aninharDireita("Media de Vendas: ")(show (mediaVendas l r))) ' '  ++ show (mediaVendas l r) ++ "\n" ++
+          "Desvio Padrao: "++ imprimirSimbolo (aninharDireita("Desvio Padrao: ")(show (desvioPadraoVendas l r))) ' '  ++ show (desvioPadraoVendas l r) ++ "\n"
 
 -- guardar informacoes das vendas
 vendas :: Int -> Int
@@ -194,9 +197,13 @@ plotarGrafico l r
     | l <= r = plotarGrafico l (r-1) ++ mes r ++ " " ++ imprimirSimbolo (vendas r) '#' ++ "\n"
     | otherwise = ""
 
-------------------------------------------------
--- TO DO:
+aninharDireita::String -> String-> Int
+aninharDireita x y = funcaoAninharAux(x)(y)
 
--- Melhorar layout do relatório conforme tamanhoHeader
--- Centralizar os títulos 
-------------------------------------------------
+funcaoAninharAux:: String -> String -> Int
+funcaoAninharAux x y 
+    | (length x + length y ) > tamanhoHeader = 0
+    | otherwise = tamanhoHeader - ((length x) + (length y))
+
+centralizar:: String -> Int
+centralizar x =  div tamanhoHeader 2  - div (length x) 2
